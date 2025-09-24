@@ -13,12 +13,12 @@ function Counter() {
     <div style={{ textAlign: "center", margin: "20px" }}>
       <h2>Counter</h2>
 
-      <button onClick={increment}>Increase</button>
+      <button onClick={increment}>Increment</button>
       <button 
         onClick={decrement} 
         style={{ marginLeft: "10px" }}
       >
-        Decrease
+        Decrement
       </button>
       <button 
         onClick={reset} 
