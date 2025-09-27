@@ -1,37 +1,65 @@
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+function Navbar() {
   return (
-    <nav style={styles.nav}>
-      <ul style={styles.ul}>
-        <li><Link to="/" style={styles.link}>Home</Link></li>
-        <li><Link to="/about" style={styles.link}>About</Link></li>
-        <li><Link to="/contact" style={styles.link}>Contact</Link></li>
-        <li><Link to="/services" style={styles.link}>Services</Link></li>
-      </ul>
+    <nav
+      style={{
+        backgroundColor: "#007BFF", // Navbar background
+        padding: "15px 20px",
+        display: "flex",
+        justifyContent: "center",
+        gap: "20px",
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+      }}
+    >
+      <Link
+        to="/"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+        }}
+      >
+        Home
+      </Link>
+      <Link
+        to="/about"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+        }}
+      >
+        About
+      </Link>
+      <Link
+        to="/services"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+        }}
+      >
+        Services
+      </Link>
+      <Link
+        to="/contact"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "1.1rem",
+          fontWeight: "bold",
+        }}
+      >
+        Contact
+      </Link>
     </nav>
   );
 }
 
-const styles = {
-  nav: {
-    background: "linear-gradient(90deg, #4facfe, #00f2fe)",
-    padding: "15px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-  },
-  ul: {
-    display: "flex",
-    justifyContent: "center",
-    listStyle: "none",
-    margin: 0,
-    padding: 0,
-    gap: "30px",
-  },
-  link: {
-    color: "white",
-    textDecoration: "none",
-    fontWeight: "bold",
-    fontSize: "18px",
-    transition: "color 0.3s",
-  },
-};
+export default Navbar;
