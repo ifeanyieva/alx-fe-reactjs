@@ -13,34 +13,31 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Form submitted!");
+    alert(`Thank you, ${formData.name}! Your message was recorded.`);
   };
 
   return (
     <div
       style={{
-        padding: "40px",
-        backgroundColor: "#f0f8ff",
-        minHeight: "80vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        minHeight: "80vh",
+        backgroundColor: "#f4f6f8",
       }}
     >
       <div
         style={{
-          background: "#ffffff",
+          width: "400px",
           padding: "30px",
+          backgroundColor: "#fff",
           borderRadius: "10px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          width: "100%",
-          maxWidth: "500px",
+          boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
         }}
       >
-        <h1 style={{ textAlign: "center", color: "#2e8b57", marginBottom: "20px" }}>
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
           Contact Us
         </h1>
-
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -49,13 +46,12 @@ function Contact() {
             value={formData.name}
             onChange={handleChange}
             style={{
-              display: "block",
               width: "100%",
-              padding: "12px",
               margin: "10px 0",
+              padding: "12px",
               border: "1px solid #ccc",
               borderRadius: "6px",
-              fontSize: "16px",
+              fontSize: "1rem",
             }}
           />
 
@@ -66,13 +62,12 @@ function Contact() {
             value={formData.email}
             onChange={handleChange}
             style={{
-              display: "block",
               width: "100%",
-              padding: "12px",
               margin: "10px 0",
+              padding: "12px",
               border: "1px solid #ccc",
               borderRadius: "6px",
-              fontSize: "16px",
+              fontSize: "1rem",
             }}
           />
 
@@ -81,43 +76,54 @@ function Contact() {
             placeholder="Your Message"
             value={formData.message}
             onChange={handleChange}
+            rows="4"
             style={{
-              display: "block",
               width: "100%",
-              padding: "12px",
               margin: "10px 0",
+              padding: "12px",
               border: "1px solid #ccc",
               borderRadius: "6px",
-              fontSize: "16px",
-              minHeight: "120px",
+              fontSize: "1rem",
+              resize: "none",
             }}
           />
 
           <button
             type="submit"
             style={{
-              display: "block",
               width: "100%",
               padding: "12px",
-              backgroundColor: "#2e8b57",
+              backgroundColor: "#007BFF",
               color: "#fff",
+              fontSize: "1rem",
+              fontWeight: "bold",
               border: "none",
               borderRadius: "6px",
-              fontSize: "18px",
-              fontWeight: "bold",
               cursor: "pointer",
               marginTop: "10px",
-              transition: "background 0.3s ease",
             }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#246b43")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#2e8b57")}
           >
             Send Message
           </button>
         </form>
+
+        {/* Live preview */}
+        <div style={{ marginTop: "20px" }}>
+          <h3 style={{ marginBottom: "10px" }}>Preview:</h3>
+          <p>
+            <strong>Name:</strong> {formData.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {formData.email}
+          </p>
+          <p>
+            <strong>Message:</strong> {formData.message}
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
 export default Contact;
+
