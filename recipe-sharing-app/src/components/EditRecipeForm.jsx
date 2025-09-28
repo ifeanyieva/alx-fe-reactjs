@@ -14,8 +14,8 @@ const EditRecipeForm = ({ recipe }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    updateRecipe(recipe.id, formData); // ✅ Now works with updateRecipe
+    e.preventDefault(); // ✅ Prevents page reload
+    updateRecipe(recipe.id, formData);
     alert("Recipe updated!");
   };
 
@@ -26,17 +26,20 @@ const EditRecipeForm = ({ recipe }) => {
         name="title"
         value={formData.title}
         onChange={handleChange}
-        style={{ display: "block", margin: "10px 0" }}
+        style={{ display: "block", margin: "10px 0", padding: "8px" }}
       />
       <textarea
         name="description"
         value={formData.description}
         onChange={handleChange}
-        style={{ display: "block", margin: "10px 0" }}
+        style={{ display: "block", margin: "10px 0", padding: "8px" }}
       />
-      <button type="submit">Save Changes</button>
+      <button type="submit" style={{ padding: "8px 15px" }}>
+        Save Changes
+      </button>
     </form>
   );
 };
 
 export default EditRecipeForm;
+
