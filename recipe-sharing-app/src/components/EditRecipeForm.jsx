@@ -1,8 +1,8 @@
 import { useState } from "react";
-import useRecipeStore from "./components/recipeStore";
+import useRecipeStore from "./recipeStore";
 
 const EditRecipeForm = ({ recipe }) => {
-  const editRecipe = useRecipeStore((state) => state.editRecipe);
+  const updateRecipe = useRecipeStore((state) => state.updateRecipe);
 
   const [formData, setFormData] = useState({
     title: recipe.title,
@@ -15,26 +15,24 @@ const EditRecipeForm = ({ recipe }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    editRecipe(recipe.id, formData);
+    updateRecipe(recipe.id, formData); // ✅ Now works with updateRecipe
     alert("Recipe updated!");
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: "15px" }}>
+    <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
       <input
         type="text"
         name="title"
         value={formData.title}
         onChange={handleChange}
-        placeholder="Edit title"
-        style={{ display: "block", marginBottom: "10px" }}
+        style={{ display: "block", margin: "10px 0" }}
       />
       <textarea
         name="description"
         value={formData.description}
         onChange={handleChange}
-        placeholder="Edit description"
-        style={{ display: "block", marginBottom: "10px" }}
+        style={{ display: "block", margin: "10px 0" }}
       />
       <button type="submit">Save Changes</button>
     </form>
