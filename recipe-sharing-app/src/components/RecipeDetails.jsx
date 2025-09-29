@@ -1,24 +1,21 @@
 import useRecipeStore from "./components/recipeStore";
 import EditRecipeForm from "./components/EditRecipeForm";
+import FavoriteButton from "./components/FavoriteButton";
 import DeleteRecipeButton from "./components/DeleteRecipeButton";
+
 
 const RecipeDetails = ({ recipeId }) => {
   const recipe = useRecipeStore((state) =>
-    state.recipes.find((recipe) => recipe.id === recipeId)
+    state.recipes.find((r) => r.id === recipeId)
   );
 
-  if (!recipe) {
-    return <p>Recipe not found.</p>;
-  }
+  if (!recipe) return <p>Recipe not found.</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h1>{recipe.title}</h1>
       <p>{recipe.description}</p>
-
-      {/* Edit + Delete */}
-      <EditRecipeForm recipe={recipe} />
-      <DeleteRecipeButton recipeId={recipe.id} />
+      <FavoriteButton recipeId={recipe.id} />
     </div>
   );
 };
