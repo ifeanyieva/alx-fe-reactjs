@@ -14,7 +14,7 @@ const EditRecipeForm = ({ recipe }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // ✅ this line is required
+    event.preventDefault(); // ✅ this line is required
     updateRecipe(recipe.id, formData);
     alert("Recipe updated!");
   };
