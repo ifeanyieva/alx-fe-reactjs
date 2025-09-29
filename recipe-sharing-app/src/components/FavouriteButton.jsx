@@ -1,5 +1,5 @@
 // src/components/FavoriteButton.jsx
-import useRecipeStore from "./recipeStore";
+import useRecipeStore from "./components/recipeStore";
 
 const FavoriteButton = ({ recipeId }) => {
   const { favorites, addFavorite, removeFavorite } = useRecipeStore();
