@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SearchBar from "./components/SearchBar";
 import RecipeList from "./components/RecipeList";
 import RecipeDetails from "./components/RecipeDetails";
 
@@ -8,6 +9,8 @@ function App() {
       <Routes>
         {/* Recipe list */}
         <Route path="/" element={<RecipeList />} />
+        <SearchBar />
+      <RecipeList />
 
         {/* Recipe details (dynamic route) */}
         <Route path="/recipes/:recipeId" element={<RecipeDetails />} />

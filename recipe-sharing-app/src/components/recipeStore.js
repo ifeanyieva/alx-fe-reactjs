@@ -1,19 +1,19 @@
-import { create } from "zustand";
+// src/components/recipeStore.js
+import create from "zustand";
 
 const useRecipeStore = create((set) => ({
-  recipes: [
-    { id: 1, title: "Spaghetti Bolognese", description: "Classic Italian pasta." },
-    { id: 2, title: "Chicken Curry", description: "Spicy and flavorful curry." },
-  ],
+  recipes: [],
+  searchTerm: "",
+  filteredRecipes: [],
 
-  // Add new recipe
+  // Add a new recipe
   addRecipe: (newRecipe) =>
     set((state) => ({ recipes: [...state.recipes, newRecipe] })),
 
-  // Initialize or reset recipes
+  // Initialize recipes
   setRecipes: (recipes) => set({ recipes }),
 
-  // ✅ Update recipe (by id)
+  // Update an existing recipe
   updateRecipe: (id, updatedRecipe) =>
     set((state) => ({
       recipes: state.recipes.map((r) =>
@@ -21,12 +21,23 @@ const useRecipeStore = create((set) => ({
       ),
     })),
 
-  // Delete recipe
+  // Delete a recipe
   deleteRecipe: (id) =>
     set((state) => ({
       recipes: state.recipes.filter((r) => r.id !== id),
     })),
+
+  // 🔍 Search term management
+  setSearchTerm: (term) => set({ searchTerm: term }),
+
+  filterRecipes: () =>
+    set((state) => ({
+      filteredRecipes: state.recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
+    })),
 }));
 
 export default useRecipeStore;
+
 
