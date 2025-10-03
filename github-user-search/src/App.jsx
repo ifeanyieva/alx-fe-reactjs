@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Search from "./components/Search";
+import { fetchUserData } from "./services/githubService.js"; // hypothetical API service
 
 function Home() {
   return <h1>Home Page</h1>;
@@ -18,6 +20,19 @@ function Contact() {
 
 function App() {
   const [count, setCount] = useState(0)
+  const [error, setError] = useState("");
+ const handleSearch = async (username) => {
+    try {
+      setError(""); // reset error
+      const userData = await fetchUserData(username);
+      setUser(userData); // save user data
+    } catch (err) {
+      setError("User not found. Please try again.");
+      setUser(null);
+    }
+  };
+}
+  
 
   return (
     <>
@@ -33,7 +48,7 @@ function App() {
       <nav
           style={{
             padding: "10px",
-            backgroundColor: "#333",
+            backgroundColor: "#2e2a2aff",
             display: "flex",
             gap: "15px",
           }}
@@ -42,12 +57,39 @@ function App() {
           <Link to="/about" style={{ color: "white", textDecoration: "none" }}>About</Link>
           <Link to="/contact" style={{ color: "white", textDecoration: "none" }}>Contact</Link>
          </nav>
-         {/* ✅ Page Content */}
-        <div style={{ padding: "20px" }}>
+
+         <div style={{ textAlign: "center", padding: "20px" }}>
+      <h1>GitHub User Search</h1>
+      <Search onSearch={handleSearch} />
+      </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {user && 
+        <div style={{ marginTop: "20px" }}>}
+          <img
+            src={user.avatar_url}
+            alt={user.login}
+            style={{ width: "120px", borderRadius: "50%" }}
+          />
+          <h2>{user.name || user.login}</h2>
+          <p>{user.bio}</p>
+          <p>Followers: {user.followers} | Following: {user.following}</p>
+          <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+            View Profile
+          </a>
+          </div>
+  
+
+         {/* ✅ Page Content */}'
+        <div style={{ padding: "20px" }>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            </Routes>
+            </Router>
+            
+
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
@@ -56,17 +98,17 @@ function App() {
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+        
         </div>
-        </Routes>
-      </div>
       
-      <p className="read-the-docs">
+      
+  <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      </Router>
+      
     </>
     
   )
-}
+
 
 export default App
