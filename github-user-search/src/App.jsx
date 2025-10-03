@@ -19,96 +19,63 @@ function Contact() {
 }
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
   const [error, setError] = useState("");
- const handleSearch = async (username) => {
+
+  // Handle form submission from Search component
+  const handleSearch = async (username) => {
     try {
-      setError(""); // reset error
-      const userData = await fetchUserData(username);
+      setError(""); // reset any previous error
+      const userData = await fetchUserData(username); // call service
       setUser(userData); // save user data
     } catch (err) {
-      setError("User not found. Please try again.");
-      setUser(null);
+      setError("❌ User not found. Please try again.");
+      setUser(null); // clear user state
     }
   };
-}
-  
 
   return (
-    <>
-    <Router>
-      <div style={{ fontFamily: "Arial, sans-serif" }}>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <nav
+    <div style={{ textAlign: "center", padding: "20px", fontFamily: "Arial" }}>
+      <h1>🔎 GitHub User Search</h1>
+      
+      {/* Search Form */}
+      <Search onSearch={handleSearch} />
+
+      {/* Error Message */}
+      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+
+      {/* User Profile Display */}
+      {user && (
+        <div
           style={{
-            padding: "10px",
-            backgroundColor: "#2e2a2aff",
-            display: "flex",
-            gap: "15px",
+            marginTop: "20px",
+            padding: "15px",
+            border: "1px solid #ddd",
+            borderRadius: "10px",
+            display: "inline-block",
+            textAlign: "left",
           }}
         >
-          <Link to="/" style={{ color: "white", textDecoration: "none" }}>Home</Link>
-          <Link to="/about" style={{ color: "white", textDecoration: "none" }}>About</Link>
-          <Link to="/contact" style={{ color: "white", textDecoration: "none" }}>Contact</Link>
-         </nav>
-
-         <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>GitHub User Search</h1>
-      <Search onSearch={handleSearch} />
-      </div>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {user && 
-        <div style={{ marginTop: "20px" }}>}
           <img
             src={user.avatar_url}
             alt={user.login}
-            style={{ width: "120px", borderRadius: "50%" }}
+            style={{ width: "120px", borderRadius: "50%", display: "block", margin: "0 auto" }}
           />
-          <h2>{user.name || user.login}</h2>
-          <p>{user.bio}</p>
-          <p>Followers: {user.followers} | Following: {user.following}</p>
-          <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-            View Profile
+          <h2 style={{ textAlign: "center" }}>{user.name || user.login}</h2>
+          <p><strong>Bio:</strong> {user.bio || "No bio available"}</p>
+          <p><strong>Followers:</strong> {user.followers} | <strong>Following:</strong> {user.following}</p>
+          <a
+            href={user.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "blue", textDecoration: "none" }}
+          >
+            View Profile →
           </a>
-          </div>
-  
-
-         {/* ✅ Page Content */}'
-        <div style={{ padding: "20px" }>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            </Routes>
-            </Router>
-            
-
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-        
         </div>
-      
-      
-  <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      
-    </>
-    
-  )
+      )}
+    </div>
+  );
+}
 
-
-export default App
+export default App;
