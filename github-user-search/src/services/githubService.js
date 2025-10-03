@@ -1,19 +1,56 @@
 import axios from "axios";
 
-// GitHub API base URL
-const BASE_URL = "https://api.github.com/users/";
+const GITHUB_BASE_URL = "https://api.github.com";
 
-/**
- * Fetch GitHub user data by username
- * @param {string} username - GitHub username
- * @returns {object} user data
- */
-export async function fetchUserData(username) {
+export const fetchUserData = async (
+  username,
+  location = "",
+  minRepos = "",
+  page = 1
+) => {
   try {
-    const response = await axios.get(`${BASE_URL}${username}`);
-    return response.data; // return the user object
+    let query = "";
+    if (username) query += `user:${username}`;
+    if (location) query += ` location:${location}`;
+    if (minRepos) query += ` repos:>=${minRepos}`;
+
+    const response = await axios.get(`${GITHUB_BASE_URL}/search/users`, {
+      params: {
+        q: query.trim() || "type:user", // fallback to all users
+        per_page: 5,
+        page,
+      },
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: import.meta.env.VITE_APP_GITHUB_API_KEY
+          ? `Bearer ${import.meta.env.VITE_APP_GITHUB_API_KEY}`
+          : undefined,
+      },
+    });
+
+    const items = await Promise.all(
+      response.data.items.map(async (basicUser) => {
+        const userDetails = await axios.get(
+          `${GITHUB_BASE_URL}/users/${basicUser.login}`,
+          {
+            headers: {
+              Accept: "application/vnd.github+json",
+              Authorization: import.meta.env.VITE_APP_GITHUB_API_KEY
+                ? `Bearer ${import.meta.env.VITE_APP_GITHUB_API_KEY}`
+                : undefined,
+            },
+          }
+        );
+        return userDetails.data;
+      })
+    );
+
+    return {
+      items,
+      hasNextPage: response.data.total_count > page * 5,
+    };
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    throw error; // let the caller handle errors
+    console.error("Error fetching users:", error);
+    throw error;
   }
-}
+};
