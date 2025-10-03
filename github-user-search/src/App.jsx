@@ -1,81 +1,94 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Search from "./components/Search";
-import { fetchUserData } from "./services/githubService.js"; // hypothetical API service
+import Navbar from "./components/Navbar"; // ✅ Import Navbar
+import { fetchUserData } from "./services/githubService.js";
 
 function Home() {
-  return <h1>Home Page</h1>;
+  return <h1 className="text-2xl font-bold text-center mt-6">🏠 Home Page</h1>;
 }
 
 function About() {
-  return <h1>About Page</h1>;
+  return <h1 className="text-2xl font-bold text-center mt-6">ℹ️ About Page</h1>;
 }
 
 function Contact() {
-  return <h1>Contact Page</h1>;
+  return <h1 className="text-2xl font-bold text-center mt-6">📞 Contact Page</h1>;
 }
 
 function App() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Handle form submission from Search component
   const handleSearch = async (username) => {
     try {
-      setError(""); // reset any previous error
-      const userData = await fetchUserData(username); // call service
-      setUser(userData); // save user data
+      setLoading(true);
+      setError("");
+      setUser(null);
+
+      const userData = await fetchUserData(username);
+      setUser(userData);
     } catch (err) {
-      setError("❌ User not found. Please try again.");
-      setUser(null); // clear user state
+      setError("❌ Looks like we can't find the user. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px", fontFamily: "Arial" }}>
-      <h1>🔎 GitHub User Search</h1>
-      
-      {/* Search Form */}
-      <Search onSearch={handleSearch} />
+    <Router>
+      <div className="font-sans">
+        {/* ✅ Navbar at the top */}
+        <Navbar />
 
-      {/* Error Message */}
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+        <div className="text-center p-6">
+          <h1 className="text-3xl font-bold mb-6">🔎 GitHub User Search</h1>
 
-      {/* User Profile Display */}
-      {user && (
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "15px",
-            border: "1px solid #ddd",
-            borderRadius: "10px",
-            display: "inline-block",
-            textAlign: "left",
-          }}
-        >
-          <img
-            src={user.avatar_url}
-            alt={user.login}
-            style={{ width: "120px", borderRadius: "50%", display: "block", margin: "0 auto" }}
-          />
-          <h2 style={{ textAlign: "center" }}>{user.name || user.login}</h2>
-          <p><strong>Bio:</strong> {user.bio || "No bio available"}</p>
-          <p><strong>Followers:</strong> {user.followers} | <strong>Following:</strong> {user.following}</p>
-          <a
-            href={user.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "blue", textDecoration: "none" }}
-          >
-            View Profile →
-          </a>
+          <Search onSearch={handleSearch} />
+
+          {error && <p className="text-red-500 mt-4">{error}</p>}
+          {loading && <p className="text-gray-500 mt-4">Loading...</p>}
+
+          {user && (
+            <div className="mt-6 p-6 border rounded-lg shadow-md max-w-md mx-auto text-left">
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-32 h-32 rounded-full mx-auto"
+              />
+              <h2 className="text-xl font-semibold text-center mt-4">
+                {user.name || user.login}
+              </h2>
+              <p className="mt-2">
+                <strong>Bio:</strong> {user.bio || "No bio available"}
+              </p>
+              <p>
+                <strong>Followers:</strong> {user.followers} |{" "}
+                <strong>Following:</strong> {user.following}
+              </p>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline mt-2 block text-center"
+              >
+                View Profile →
+              </a>
+            </div>
+          )}
+
+          {/* Routes */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
         </div>
-      )}
-    </div>
+      </div>
+    </Router>
   );
 }
 
 export default App;
+
