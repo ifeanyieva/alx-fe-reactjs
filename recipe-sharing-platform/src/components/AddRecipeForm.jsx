@@ -4,13 +4,28 @@ function AddRecipeForm() {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
+  const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+
+  // Validation function
+  const validate = () => {
+    const newErrors = {};
+    if (!title.trim()) newErrors.title = "Recipe title is required.";
+    if (!ingredients.trim())
+      newErrors.ingredients = "Please enter at least one ingredient.";
+    if (!steps.trim())
+      newErrors.steps = "Please include preparation steps.";
+    return newErrors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !ingredients || !steps) {
-      setMessage("⚠️ Please fill out all fields before submitting.");
+    const newErrors = validate();
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      setMessage("⚠️ Please fix the highlighted fields.");
       return;
     }
 
@@ -21,13 +36,14 @@ function AddRecipeForm() {
       steps: steps.split("\n"),
     };
 
-    console.log("New Recipe Added:", newRecipe);
+    console.log("✅ New Recipe Added:", newRecipe);
     setMessage("✅ Recipe added successfully! (Check console for data)");
 
     // Reset form
     setTitle("");
     setIngredients("");
     setSteps("");
+    setErrors({});
   };
 
   return (
@@ -54,8 +70,15 @@ function AddRecipeForm() {
               placeholder="Enter recipe title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700 text-sm sm:text-base"
+              className={`w-full px-4 py-2 sm:py-3 border rounded-md focus:ring-2 focus:outline-none text-gray-700 text-sm sm:text-base ${
+                errors.title
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
             />
+            {errors.title && (
+              <p className="text-red-600 text-sm mt-1">{errors.title}</p>
+            )}
           </div>
 
           {/* Ingredients */}
@@ -72,8 +95,15 @@ function AddRecipeForm() {
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
               rows="5"
-              className="w-full px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700 text-sm sm:text-base resize-y"
+              className={`w-full px-4 py-2 sm:py-3 border rounded-md focus:ring-2 focus:outline-none text-gray-700 text-sm sm:text-base resize-y ${
+                errors.ingredients
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
             ></textarea>
+            {errors.ingredients && (
+              <p className="text-red-600 text-sm mt-1">{errors.ingredients}</p>
+            )}
           </div>
 
           {/* Preparation Steps */}
@@ -90,8 +120,15 @@ function AddRecipeForm() {
               value={steps}
               onChange={(e) => setSteps(e.target.value)}
               rows="5"
-              className="w-full px-4 py-2 sm:py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700 text-sm sm:text-base resize-y"
+              className={`w-full px-4 py-2 sm:py-3 border rounded-md focus:ring-2 focus:outline-none text-gray-700 text-sm sm:text-base resize-y ${
+                errors.steps
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
             ></textarea>
+            {errors.steps && (
+              <p className="text-red-600 text-sm mt-1">{errors.steps}</p>
+            )}
           </div>
 
           {/* Submit Button */}
@@ -115,4 +152,5 @@ function AddRecipeForm() {
 }
 
 export default AddRecipeForm;
+
 
